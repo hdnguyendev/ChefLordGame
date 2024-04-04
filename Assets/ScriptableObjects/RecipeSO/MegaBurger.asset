@@ -19,3 +19,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: bd2faf2d0f343684a8300d2fbbafef3c, type: 2}
   - {fileID: 11400000, guid: e62f9120163b31d4a97add237bd79986, type: 2}
   recipeName: MegaBurger
+  points: 5
+  timeLimit: 60
+  timeRun: 0

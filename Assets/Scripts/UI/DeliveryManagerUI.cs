@@ -34,6 +34,15 @@ public class DeliveryManagerUI : MonoBehaviour
             if (child == recipeTemplate) continue;
             Destroy(child.gameObject);
         }
+        // chỉ update món mới được thêm vào list mà không update lại toàn bộ list
+        // foreach (RecipeSO recipeSO in DeliveryManager.Instance.GetNewlyAddedRecipeSOList()) {
+        //     Transform recipeTransform = Instantiate(recipeTemplate, container);
+        //     recipeTransform.gameObject.SetActive(true); 
+
+        //     recipeTransform.GetComponent<DeliveryManagerSingleUI>().SetRecipeSO(recipeSO);
+        // }
+        
+
         foreach (RecipeSO recipeSO in DeliveryManager.Instance.GetWaitingRecipeSOList()) {
             Transform  recipeTransform = Instantiate(recipeTemplate, container);
             recipeTransform.gameObject.SetActive(true); 

@@ -64,7 +64,7 @@ public class SoundManager : MonoBehaviour
     private void DeliveryManager_OnRecipeFailed(object sender, EventArgs e)
     {
         DeliveryCounter deliveryCounter = DeliveryCounter.Instance;
-        PlaySound(audioClipRefsSO.deliveryFailed, Camera.main.transform.position);
+        PlaySound(audioClipRefsSO.deliveryFailed, deliveryCounter.transform.position);
     }
     private void PlaySound(AudioClip[] audioClipArray, Vector3 position, float volume = 1f)
     {
@@ -81,7 +81,16 @@ public class SoundManager : MonoBehaviour
         PlaySound(audioClipRefsSO.footstep, position, volumeMultipler * volume);
 
     }
+    public void PlayCountdownSound()
+    {
+        PlaySound(audioClipRefsSO.warning, Vector3.zero);
 
+    }
+    public void PlayWarningSound(Vector3 position)
+    {
+        PlaySound(audioClipRefsSO.warning, position);
+
+    }
 
     public void ChangeVolume()
     {
@@ -100,4 +109,4 @@ public class SoundManager : MonoBehaviour
         return volume;
     }
 }
-  
+

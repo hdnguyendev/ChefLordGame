@@ -16,3 +16,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: bd2faf2d0f343684a8300d2fbbafef3c, type: 2}
   - {fileID: 11400000, guid: e62f9120163b31d4a97add237bd79986, type: 2}
   recipeName: Salad
+  points: 2
+  timeLimit: 20
+  timeRun: 0

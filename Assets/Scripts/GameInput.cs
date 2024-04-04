@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class GameInput : MonoBehaviour
@@ -13,6 +14,7 @@ public class GameInput : MonoBehaviour
     {
         get; private set;
     }
+    public event EventHandler OnPlayAction;
     public event EventHandler OnInteractAction;
     public event EventHandler OnInteractAlternateAction;
     public event EventHandler OnPauseAction;
@@ -46,7 +48,13 @@ public class GameInput : MonoBehaviour
         playerInputActions.Player.Interact.performed += Interact_performed;
         playerInputActions.Player.InteractAlternate.performed += InteractAlternate_performed;
         playerInputActions.Player.Pause.performed += Pause_performed;
+        playerInputActions.Player.Play.performed += Play_performed;
 
+    }
+
+    private void Play_performed(InputAction.CallbackContext context)
+    {
+        OnPlayAction?.Invoke(this, EventArgs.Empty);
     }
 
     private void OnDestroy()
@@ -54,7 +62,7 @@ public class GameInput : MonoBehaviour
         playerInputActions.Player.Interact.performed -= Interact_performed;
         playerInputActions.Player.InteractAlternate.performed -= InteractAlternate_performed;
         playerInputActions.Player.Pause.performed -= Pause_performed;
-
+        playerInputActions.Player.Play.performed -= Play_performed;
         playerInputActions.Dispose();
     }
     private void Pause_performed(InputAction.CallbackContext context)

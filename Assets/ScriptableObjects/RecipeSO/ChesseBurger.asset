@@ -17,3 +17,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 67728d0e170784241b46990211ffe288, type: 2}
   - {fileID: 11400000, guid: e3b2dd4096631334e98c249bff99c742, type: 2}
   recipeName: ChesseBurger
+  points: 3
+  timeLimit: 40
+  timeRun: 0
