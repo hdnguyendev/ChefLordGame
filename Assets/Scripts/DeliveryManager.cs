@@ -1,16 +1,24 @@
- using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DeliveryManager : MonoBehaviour
 {
+    public static DeliveryManager Instance { get; private set; }
+
     public event EventHandler OnRecipeSpawned;
     public event EventHandler OnRecipeCompleted;
     public event EventHandler OnRecipeSuccess;
     public event EventHandler OnRecipeFailed;
 
-    public static DeliveryManager Instance { get; private set; }
+   
+    
+
+
     [SerializeField] private RecipeListSO recipeListSO;
     private List<RecipeSO> waitingRecipeSOList;
 
@@ -20,6 +28,7 @@ public class DeliveryManager : MonoBehaviour
     private int waitingRecipeMax = 4;
     private int successfulRecipesAmount;
     private int playerScore;
+    private int scoreCompletedLevel;
 
     private void Awake()
     {
@@ -27,6 +36,27 @@ public class DeliveryManager : MonoBehaviour
         waitingRecipeSOList = new List<RecipeSO>();
         successfulRecipesAmount = 0;
         playerScore = 0;
+
+       if (SceneManager.GetActiveScene().name == KitchenGameManager.LEVEL1)
+        {
+            scoreCompletedLevel = GameLevelManager.scoreCompletedLevel1;
+        }
+        else if (SceneManager.GetActiveScene().name == KitchenGameManager.LEVEL2)
+        {
+            scoreCompletedLevel = GameLevelManager.scoreCompletedLevel2;
+        }
+        else if (SceneManager.GetActiveScene().name == KitchenGameManager.LEVEL3)
+        {
+            scoreCompletedLevel = GameLevelManager.scoreCompletedLevel3;
+        }
+        else
+        {
+            scoreCompletedLevel = 999;
+        }
+
+    }
+    private void Start() {
+         
     }
     private void Update()
     {
@@ -41,10 +71,10 @@ public class DeliveryManager : MonoBehaviour
                 RecipeSO waitingRecipeSO = Instantiate(recipeListSO.GetRandomRecipeSO());
                 // thời gian hoàn thành món 
                 float timeLimit = waitingRecipeSO.timeLimit;
-                
+
                 waitingRecipeSOList.Add(waitingRecipeSO);
 
-                // đếm ngược, hết thời gian thì xóa ra khỏi list và trừ điểm
+                // đếm ngược, hết thời gian thì xóa ra khỏi list 
                 StartCoroutine(DestroyRecipe(waitingRecipeSO, timeLimit));
 
                 OnRecipeSpawned?.Invoke(this, EventArgs.Empty);
@@ -52,10 +82,16 @@ public class DeliveryManager : MonoBehaviour
             }
 
         }
+
+        if (playerScore >= scoreCompletedLevel)
+        {
+            // change stated action overgame
+            KitchenGameManager.Instance.GameOver();
+        }
     }
     private IEnumerator DestroyRecipe(RecipeSO waitingRecipeSO, float timeLimit)
     {
-        // time limit đếm ngược xong thì xóa ra khỏi lit và trừ điểm
+        // time limit đếm ngược xong thì xóa ra khỏi list
         yield return new WaitForSeconds(timeLimit);
         if (waitingRecipeSOList.Contains(waitingRecipeSO))
         {
@@ -121,5 +157,10 @@ public class DeliveryManager : MonoBehaviour
     public int GetPlayerScore()
     {
         return playerScore;
+    }
+
+    internal object GetScoreCompletedLevel()
+    {
+        return scoreCompletedLevel;
     }
 }

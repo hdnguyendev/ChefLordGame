@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class KitchenGameManager : MonoBehaviour
 {
@@ -11,6 +12,10 @@ public class KitchenGameManager : MonoBehaviour
     {
         get; private set;
     }
+    public static string LEVEL1 = "GameLevel1";
+    public static string LEVEL2 = "GameLevel2";
+    public static string LEVEL3 = "GameLevel3";
+    [SerializeField] private float gamePlayingTimerMax = 100f;
 
     public event EventHandler OnStageChanged;
     public event EventHandler OnPauseAction;
@@ -27,7 +32,6 @@ public class KitchenGameManager : MonoBehaviour
     private State state;
     private float countDownToStartTimer = 3f;
     private float gamePlayingTimer;
-    [SerializeField] private float gamePlayingTimerMax = 10f;
 
     private bool isGamePaused = false;
 
@@ -72,6 +76,20 @@ public class KitchenGameManager : MonoBehaviour
     {
         Instance = this;
         state = State.WaitingToStart;
+
+        if (SceneManager.GetActiveScene().name == LEVEL1)
+        {
+            gamePlayingTimerMax = GameLevelManager.gamePlayingTimerLevel1;
+        }
+        else if (SceneManager.GetActiveScene().name == LEVEL2)
+        {
+            gamePlayingTimerMax = GameLevelManager.gamePlayingTimerLevel2;
+        }
+        else if (SceneManager.GetActiveScene().name == LEVEL3)
+        {
+            gamePlayingTimerMax = GameLevelManager.gamePlayingTimerLevel3;
+        } 
+
     }
 
     private void Update()
@@ -79,7 +97,7 @@ public class KitchenGameManager : MonoBehaviour
         switch (state)
         {
             case State.WaitingToStart:
-                
+
                 break;
             case State.CountDownToStart:
                 countDownToStartTimer -= Time.deltaTime;
@@ -112,6 +130,13 @@ public class KitchenGameManager : MonoBehaviour
     public bool IsCountdownToStartActive()
     {
         return state == State.CountDownToStart;
+    }
+
+    public void GameOver()
+    {
+        state = State.GameOver;
+        gamePlayingTimer = 0f;
+        OnStageChanged?.Invoke(this, EventArgs.Empty);
     }
     public bool IsGameOver()
     {
